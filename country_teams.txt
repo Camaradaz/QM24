@@ -1,0 +1,92 @@
+[EUROPE]
+Albania
+Andorra
+Austria
+Belgium
+Bulgaria
+Croatia
+Denmark
+England
+Finland
+France
+Germany
+Greece
+Hungary
+Iceland
+Ireland
+Italy
+Liechtenstein
+Luxembourg
+Netherlands
+Norway
+Romania
+Russia
+San Marino
+Scotland
+Spain
+Sweden
+Switzerland
+Ukraine
+Wales
+
+[AMERICA]
+Anguilla
+Antigua and Barbuda
+Argentina
+Bahamas
+Barbados
+Belize
+Bolivia
+Brazil
+Canada
+Chile
+Colombia
+Cuba
+Curaçao
+Ecuador
+El Salvador
+Guatemala
+Guyana
+Haiti
+Jamaica
+Mexico
+Nicaragua
+Panama
+Paraguay
+Peru
+Suriname
+Trinidad and Tobago
+United States
+Uruguay
+Venezuela
+
+[AFRICA]
+Algeria
+Angola
+Benin
+Botswana
+Burkina Faso
+Burundi
+Chad
+Congo
+Côte d'Ivoire (Ivory Coast)
+Djibouti
+Egypt
+Ethiopia
+Gambia
+Ghana
+Kenya
+Lebanon
+Libya
+Madagascar
+Malawi
+Mali
+Morocco
+Nigeria
+Saudi Arabia
+Senegal
+South Africa
+Togo
+Tunisia
+Uganda
+Zambia
