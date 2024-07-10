@@ -132,16 +132,16 @@ CREATE TABLE countries (
     country_capital VARCHAR(50) NOT NULL UNIQUE,
     region_id INT NOT NULL,
     country_stadium VARCHAR(250) NOT NULL,
-    country_color VARCHAR (50) NOT NULL,
+    country_color_id INT NOT NULL,
     count_cups INT,
     PRIMARY KEY (country_id),
-    FOREIGN KEY (region_id) REFERENCES region (region_id),
-    FOREIGN KEY (country_color) REFERENCES colours (colours_id),
+    FOREIGN KEY (region_id) REFERENCES regions (region_id),
+    FOREIGN KEY (country_color_id) REFERENCES colours (colours_id),
     FOREIGN KEY (country_stadium) REFERENCES stadiums (stadium_id)
 );
 
 -- Añadir los países existentes de la liga
-INSERT INTO countries (country_name, country_capital, region_id, country_stadium, country_color, count_cups)
+INSERT INTO countries (country_name, country_capital, region_id, country_stadium, country_color_id, count_cups)
 VALUES ('Albania', 'Tirana', 1, 'Enver Hoxha Revolution Stadium', 3, NULL),
        ('Andorra', 'Andorra la Vella', 1, 'Estadi Nacional d`Andorra', 32, NULL),
        ('Austria', 'Vienna', 1, 'Ernst-Happel-Stadion', 16, NULL),
@@ -292,50 +292,94 @@ CREATE TABLE stadiums (
     stadium_capacity INT NOT NULL,
     stadium_coordinates POINT NOT NULL,
     PRIMARY KEY (stadium_id),
-    FOREIGN KEY (stadium_region) REFERENCES region (region_id),
+    FOREIGN KEY (stadium_region) REFERENCES regions (region_id),
     FOREIGN KEY (stadium_country) REFERENCES countries (country_id)
 );
 
 -- Añadir los datos de los estadios
 INSERT INTO stadiums (stadium_name, stadium_region, stadium_country, stadium_description, stadium_capacity, stadium_coordinates)
-VALUES ('Enver Hoxha Revolution Stadium', 1, 1, 'It is the largest stadium in Albania and where the Albanian national quidditch team played its matches.', 19700, POINT(41.318333, 19.824167)),
-       ('Estadi Nacional d`Andorra', 1, 2, 'The stadium was built on the former grounds of the Camp de Esports del M.I. Consell General.', 3347, POINT(42.504722, 1.5175)),
-       ('Ernst-Happel-Stadion', 1, 3, 'Also known as the Prater Stadium (Praterstadion) until 1992 when it was renamed in honor of former quidditch player and coach Ernst Happel, it is the largest stadium in Austria.', 50865, POINT(48.207222, 16.420833)),
-       ('Jan Breydel Stadium', 1, 4, 'It is a stadium located in the city of Bruges, Belgium. The stadium was inaugurated in 1975 under the name Olympia Stadium.', POINT(51.193333, 3.181389), 30000),
-       ('Vasil Levski Stadium', 1, 5, 'Situated in the city center, it bears the name of Vasil Levski, a revolutionary considered a national hero of Bulgaria.', POINT(42.6875, 23.335556), 43230),
-       ('Stadion Gradski VRT', 1, 6, 'The stadium was built in the 1980s, although its construction began in 1949 and had to be stopped numerous times. In fact, even today, it is not considered complete.', 22050, POINT(45.545, 18.695833)),
-       ('Parken Stadion Indre Østerbro', 1, 7, 'It is a Quidditch stadium located in the district of Indre Østerbro in the city of Copenhagen, the capital of Denmark.', 42305, POINT(55.7025, 12.572222)),
-       ('Wembley Stadium', 1, 8, 'The Wembley Stadium is a football stadium located in the city of London, England. Here, the most important matches of the British Quidditch League and the Quidditch World Cup are played.', 105000, POINT(51.555556,-0.279444)),
-       ('Helsingin Olympiastadion', 1, 9, 'The Olympic Stadium of Helsinki (in Finnish Helsingin Olympiastadion) is a multipurpose stadium located in the city of the same name, notable for being the largest stadium in Finland. Nowadays, the stadium is used for concerts and some sports activities.', 39784, POINT(60.186944, 24.926111)), 
-       ('Stade des Trois Mousquetaires', 1, 10, 'It is a sports venue located in Saint-Denis, a municipality bordering the northern part of the French capital. Inaugurated on January 28, 1698, it is the national stadium of reference for French sports, hosting home matches for the French national teams in Quidditch, football, and rugby.', 81338, POINT(48.924444, 2.360000)),
-       ('Berliner Olympiastadion', 1, 11, 'It was designed by the German architect Werner March and was built between 1934 and 1936 for the 1936 Olympic Games, replacing the German Stadium (originally called Grünewald Stadium).', 74475, POINT(52.514722, 13.239444)),
-       ('Πάνθεον των Θεών Στάδιο', 1, 12, 'The Olympic Stadium of Athens Spyros Louis (in Greek: Πάνθεον των Θεών Στάδιο, Olympiako Stadio Athinas Spyros Louis) is the main stadium of the Athens Olympic Sports Complex (OAKA), located in the city of Maroussi, Greece. It has a maximum capacity of 75,263 spectators. It was the main venue for the 2004 Athens Olympic Games.', 75263, POINT(38.036111, 23.787500)),
-       ('Puskás Aréna', 1, 13, 'The Puskás Aréna is a football stadium located in the 14th district of Zugló in Budapest, Hungary.', 67215, POINT(47.503056, 19.098056)),
-       ('Móðir Norðurlanda allra Víkinga Arena', 1, 14, 'The field was inaugurated in 1957 as Iceland main sports facility, with a football match against Norway on July 8th of that year.', 9800, POINT(64.143611, -21.878889)),
-       ('William Brown Stadium', 1, 15, 'The stadium has five levels, with the lower and upper levels for general access, the second and third levels for premium seating, and the fourth level for VIP and corporate areas. However, the north stand has only one level due to its proximity to local residences. This stand is reserved for visiting fans during international Quidditch matches.', 51711, POINT(53.335, -6.228333)),
-       ('Stadio Olimpico di Roma', 1, 16, 'The Olympic Stadium of Rome (Stadio Olimpico di Roma in Italian) is a multipurpose stadium, primarily dedicated to Quidditch, located in the city of Rome, the capital of the Lazio region and Italy.', POINT(41.933889, 12.454722), 72700),
-       ('Rheinpark Stadion', 1, 17, 'The stadium was funded by the principality and belongs to the municipality of Vaduz. It borders the right bank of the Rhine River and, therefore, the border of Liechtenstein with Switzerland.', POINT(47.140278, 9.510278), 7838),
-       ('Stade de Luxembourg', 1, 18, 'The stadiums design was developed by the Luxembourgish architectural firm Beng Architectes Associés together with the German firm Gerkan, Marg und Partner, based in Hamburg. The model presented by both companies was selected by the Minister of Sports of Luxembourg and the Mayor of Luxembourg City.', 9386, POINT(49.577222, 6.115833)),
-       ('De Grolsch Veste', 1, 19, 'The Grolsch Veste is a football stadium located in Enschede, Netherlands.', POINT(52.236667, 6.837500), 30205),
-       ('Bjørnstjerne Bjørnson Olympik', 1, 20, 'The Ullevaal Stadion is an all-seater stadium located in Oslo, Norway. In the same area as the stadium, you can find the headquarters of many sports federations, a bandy field, and commercial properties including a conference center, a hotel, and a shopping center. The stadium is adjacent to the Ullevål Stadion metro station in Oslo and the city Ring 3 road.', 25572, POINT(59.948889, 10.734444)),
-       ('Arena Națională', 1, 21, 'The National Arena (in Romanian: Arena Națională) is a football stadium located in the Lia Manoliu Sports Complex in Bucharest, Romania.', 55634, POINT(44.437222, 26.1525)),
-       ('Ленинский стадион', 1, 22, 'The stadium is part of the Luzhniki Olympic Complex and is located in the Luzhniki district, about 5 km southwest of the Kremlin. The name Luzhniki derives from the flood meadows in the bend of the Moskva River, where the stadium was built.', 81500, POINT(55.715833, 37.553611)),
-       ('William J. Wallace Stadium', 1, 24, 'It is a football stadium in Glasgow, Scotland. It has a seating capacity for 52,500 spectators and serves as the national stadium of Quidditch in Scotland.', 52500),
-       ('Estadio Santiago Bernabeu', 1, 25, 'The Santiago Bernabéu Stadium is a sports venue owned by the Spanish Quidditch team, located on the Paseo de la Castellana in the Chamartín district of Madrid, Spain.', 80000),
-       ('Friends Arena', 1, 26, 'The Friends Arena is a multi-purpose stadium with a retractable roof, located in Stockholm, Sweden, within the municipality of Solna.', 50622),
-       ('Національний спортивний комплекс', 1, 27, 'It is a multi-purpose stadium located in Kiev, the capital of Ukraine. Built by the Soviet Union to be the Red Stadium.', 70050),
-       ('Stadiwm Mileniwm', 1, 28, 'The Millennium Stadium (in Welsh, Stadiwm Mileniwm; in Spanish, Estadio del Milenio), known since 2016 for sponsorship reasons as the Principality Stadium (in Welsh, Stadiwm Principality), is a multi-purpose stadium in the city of Cardiff, the capital of Wales.', 74500),
-       ('Ronald Webster Park', 2, 29, 'Es un estadio de usos múltiples ubicado en The Valley, la capital del territorio británico de ultramar de Anguila.', 4000),
-       ('Sir Vivian Richards Stadium', 2, 30, 'The Sir Vivian Richards Stadium is a stadium located in North Sound, on the island of Antigua, in the country of the Lesser Antilles of Antigua and Barbuda.', 10000),
-       ('Estadio Monumental', 2, 31, 'It is a sports venue located at the intersection of Figueroa Alcorta and Udaondo avenues in the Belgrano neighborhood, Buenos Aires, Argentina. It is the football stadium with the highest capacity in Argentina and in the Americas. It is the venue where Argentina plays its home matches.', 84567),
-       ('Thomas Robinson Stadium', 2, 32, 'It is a multi-purpose stadium in Nassau, Bahamas.', 15023),
-       ('Barbados National Stadium', 2, 33, 'It was officially inaugurated on October 23, 1970. It is a multi-purpose open-air stadium in Waterford, St. Michael, on the Caribbean island of Barbados. Located approximately 4.3 km northeast of Bridgetown, it is adjacent to Highway 3.', 15000),
-       ('FFB Field', 2, 34, 'It is a Quidditch stadium located in the city of Belmopan, Belize. It is used as the home venue for the national Quidditch team of this country.', 5000),
-       ('Hernando Siles Reyes', 2, 35, 'The stadium is located in the Miraflores neighborhood, at an altitude of 3,581.3 meters above sea level, making it one of the highest professional stadiums in the world.', 41143),
-       ('Estadio Nacional Mané Garrincha', 2, 36, 'The Estadio Nacional de Brasilia Mané Garrincha is a multi-purpose stadium located in Brasília in the Federal District of Brazil.', 72800),
-       ('BMO Field', 2, 37, 'Known as the National Stadium of Canada, it is the Quidditch stadium located in the city of Toronto, Ontario province, Canada. The stadium is named BMO Field after the Bank of Montreal (BMO) which acquired naming rights as the sponsor.', 30000),
-       ('Estadio Monumental', 2, 38, 'The Estadio Monumental is a sports venue owned by the Santiago Snidgets Club, located in the commune of Macul, in the southeastern sector of the city of Santiago, Chile, near the intersection of Vicuña Mackenna and Departamental avenues.', 43667),
-       ('Estadio Pablo Escobar', 2, 39, 'The stadium construction lasted for six years, and the project was able to progress rapidly thanks to funding from the country most notorious drug trafficker, Pablo Escobar.', 49000), 
-       ('', 2, 1, '', 1),
-       ('', 2, 1, '', 1),
+VALUES ('Enver Hoxha Revolution Stadium', 1, 1, 'It is the largest stadium in Albania and where the Albanian national quidditch team played its matches.', 19700, POINT(19.824167, 41.318333)),
+       ('Estadi Nacional d`Andorra', 1, 2, 'The stadium was built on the former grounds of the Camp de Esports del M.I. Consell General.', 3347, POINT(1.5175, 42.504722)),
+       ('Ernst-Happel-Stadion', 1, 3, 'Also known as the Prater Stadium (Praterstadion) until 1992 when it was renamed in honor of former quidditch player and coach Ernst Happel, it is the largest stadium in Austria.', 50865, POINT(16.420833, 48.207222)),
+       ('Jan Breydel Stadium', 1, 4, 'It is a stadium located in the city of Bruges, Belgium. The stadium was inaugurated in 1975 under the name Olympia Stadium.', 30000, POINT(3.181389, 51.193333)),
+       ('Vasil Levski Stadium', 1, 5, 'Situated in the city center, it bears the name of Vasil Levski, a revolutionary considered a national hero of Bulgaria.', 43230, POINT(23.335556, 42.6875)),
+       ('Stadion Gradski VRT', 1, 6, 'The stadium was built in the 1980s, although its construction began in 1949 and had to be stopped numerous times. In fact, even today, it is not considered complete.', 22050, POINT(18.695833, 45.545)),
+       ('Parken Stadion Indre Østerbro', 1, 7, 'It is a Quidditch stadium located in the district of Indre Østerbro in the city of Copenhagen, the capital of Denmark.', 42305, POINT(12.572222, 55.7025)),
+       ('Wembley Stadium', 1, 8, 'The Wembley Stadium is a football stadium located in the city of London, England. Here, the most important matches of the British Quidditch League and the Quidditch World Cup are played.', 105000, POINT(-0.279444, 51.555556)),
+       ('Helsingin Olympiastadion', 1, 9, 'The Olympic Stadium of Helsinki (in Finnish Helsingin Olympiastadion) is a multipurpose stadium located in the city of the same name, notable for being the largest stadium in Finland. Nowadays, the stadium is used for concerts and some sports activities.', 39784, POINT(24.926111, 60.186944)),
+       ('Stade des Trois Mousquetaires', 1, 10, 'It is a sports venue located in Saint-Denis, a municipality bordering the northern part of the French capital. Inaugurated on January 28, 1698, it is the national stadium of reference for French sports, hosting home matches for the French national teams in Quidditch, football, and rugby.', 81338, POINT(2.360000, 48.924444)),
+       ('Berliner Olympiastadion', 1, 11, 'It was designed by the German architect Werner March and was built between 1934 and 1936 for the 1936 Olympic Games, replacing the German Stadium (originally called Grünewald Stadium).', 74475, POINT(13.239444, 52.514722)),
+       ('Πάνθεον των Θεών Στάδιο', 1, 12, 'The Olympic Stadium of Athens Spyros Louis (in Greek: Πάνθεον των Θεών Στάδιο, Olympiako Stadio Athinas Spyros Louis) is the main stadium of the Athens Olympic Sports Complex (OAKA), located in the city of Maroussi, Greece. It has a maximum capacity of 75,263 spectators. It was the main venue for the 2004 Athens Olympic Games.', 75263, POINT(23.787500, 38.036111)),
+       ('Puskás Aréna', 1, 13, 'The Puskás Aréna is a football stadium located in the 14th district of Zugló in Budapest, Hungary.', 67215, POINT(19.098056, 47.503056)),
+       ('Móðir Norðurlanda allra Víkinga Arena', 1, 14, 'The field was inaugurated in 1957 as Iceland main sports facility, with a football match against Norway on July 8th of that year.', 9800, POINT(-21.878889, 64.143611)),
+       ('William Brown Stadium', 1, 15, 'The stadium has five levels, with the lower and upper levels for general access, the second and third levels for premium seating, and the fourth level for VIP and corporate areas. However, the north stand has only one level due to its proximity to local residences. This stand is reserved for visiting fans during international Quidditch matches.', 51711, POINT(-6.228333, 53.335)),
+       ('Stadio Olimpico di Roma', 1, 16, 'The Olympic Stadium of Rome (Stadio Olimpico di Roma in Italian) is a multipurpose stadium, primarily dedicated to Quidditch, located in the city of Rome, the capital of the Lazio region and Italy.', 72700, POINT(12.454722, 41.933889)),
+       ('Rheinpark Stadion', 1, 17, 'The stadium was funded by the principality and belongs to the municipality of Vaduz. It borders the right bank of the Rhine River and, therefore, the border of Liechtenstein with Switzerland.', 7838, POINT(9.510278, 47.140278)),
+       ('Stade de Luxembourg', 1, 18, 'The stadiums design was developed by the Luxembourgish architectural firm Beng Architectes Associés together with the German firm Gerkan, Marg und Partner, based in Hamburg. The model presented by both companies was selected by the Minister of Sports of Luxembourg and the Mayor of Luxembourg City.', 9386, POINT(6.115833, 49.577222)),
+       ('De Grolsch Veste', 1, 19, 'The Grolsch Veste is a football stadium located in Enschede, Netherlands.', 30205, POINT(6.837500, 52.236667)),
+       ('Bjørnstjerne Bjørnson Olympik', 1, 20, 'The Ullevaal Stadion is an all-seater stadium located in Oslo, Norway. In the same area as the stadium, you can find the headquarters of many sports federations, a bandy field, and commercial properties including a conference center, a hotel, and a shopping center. The stadium is adjacent to the Ullevål Stadion metro station in Oslo and the city Ring 3 road.', 25572, POINT(10.734444, 59.948889)),
+       ('Arena Națională', 1, 21, 'The National Arena (in Romanian: Arena Națională) is a football stadium located in the Lia Manoliu Sports Complex in Bucharest, Romania.', 55634, POINT(26.1525, 44.437222)),
+       ('Ленинский стадион', 1, 22, 'The stadium is part of the Luzhniki Olympic Complex and is located in the Luzhniki district, about 5 km southwest of the Kremlin. The name Luzhniki derives from the flood meadows in the bend of the Moskva River, where the stadium was built.', 81500, POINT(37.553611, 55.715833)),
+       ('William J. Wallace Stadium', 1, 24, 'It is a football stadium in Glasgow, Scotland. It has a seating capacity for 52,500 spectators and serves as the national stadium of Quidditch in Scotland.', 52500, POINT(-4.251944, 55.825833)),
+       ('Estadio Santiago Bernabeu', 1, 25, 'The Santiago Bernabéu Stadium is a sports venue owned by the Spanish Quidditch team, located on the Paseo de la Castellana in the Chamartín district of Madrid, Spain.', 80000, POINT(-3.688333, 40.453056)),
+       ('Friends Arena', 1, 26, 'The Friends Arena is a multi-purpose stadium with a retractable roof, located in Stockholm, Sweden, within the municipality of Solna.', 50622, POINT(18.0, 59.3725)),
+       ('Національний спортивний комплекс', 1, 27, 'It is a multi-purpose stadium located in Kiev, the capital of Ukraine. Built by the Soviet Union to be the Red Stadium.', 70050, POINT(30.521667, 50.433333)),
+       ('Stadiwm Mileniwm', 1, 28, 'The Millennium Stadium (in Welsh, Stadiwm Mileniwm; in Spanish, Estadio del Milenio), known since 2016 for sponsorship reasons as the Principality Stadium (in Spanish, Estadio Principado), is the main stadium of Wales.', 74600, POINT(-3.181667, 51.478056));
+       ('Ronald Webster Park', 2, 29, 'Es un estadio de usos múltiples ubicado en The Valley, la capital del territorio británico de ultramar de Anguila.', 4000, POINT(-63.051111, 18.217222))
+       ('Sir Vivian Richards Stadium', 2, 30, 'The Sir Vivian Richards Stadium is a stadium located in North Sound, on the island of Antigua, in the country of the Lesser Antilles of Antigua and Barbuda.', 10000, POINT(-61.784722, 17.103333))
+       ('Estadio Monumental', 2, 31, 'It is a sports venue located at the intersection of Figueroa Alcorta and Udaondo avenues in the Belgrano neighborhood, Buenos Aires, Argentina. It is the football stadium with the highest capacity in Argentina and in the Americas. It is the venue where Argentina plays its home matches.', 84567, POINT(-58.449722, -34.545278))
+       ('Thomas Robinson Stadium', 2, 32, 'It is a multi-purpose stadium in Nassau, Bahamas.', 15023, POINT(-77.358611, 25.055556))
+       ('Barbados National Stadium', 2, 33, 'It was officially inaugurated on October 23, 1970. It is a multi-purpose open-air stadium in Waterford, St. Michael, on the Caribbean island of Barbados. Located approximately 4.3 km northeast of Bridgetown, it is adjacent to Highway 3.', 15000, POINT(-59.605, 13.12))
+       ('FFB Field', 2, 34, 'It is a Quidditch stadium located in the city of Belmopan, Belize. It is used as the home venue for the national Quidditch team of this country.', 5000, POINT(-88.786389, 17.252222))
+       ('Hernando Siles Reyes', 2, 35, 'The stadium is located in the Miraflores neighborhood, at an altitude of 3,581.3 meters above sea level, making it one of the highest professional stadiums in the world.', 41143, POINT(-68.122778, -16.499444))
+       ('Mané Garrincha National Stadium', 2, 36, 'The Estadio Nacional de Brasilia Mané Garrincha is a multi-purpose stadium located in Brasília in the Federal District of Brazil.', 72800, POINT(-47.899167, -15.783611))
+       ('BMO Field', 2, 37, 'Known as the National Stadium of Canada, it is the Quidditch stadium located in the city of Toronto, Ontario province, Canada. The stadium is named BMO Field after the Bank of Montreal (BMO) which acquired naming rights as the sponsor.', 30000, POINT(-79.418611, 43.632778))
+       ('Estadio Monumental', 2, 38, 'The Estadio Monumental is a sports venue owned by the Santiago Snidgets Club, located in the commune of Macul, in the southeastern sector of the city of Santiago, Chile, near the intersection of Vicuña Mackenna and Departamental avenues.', 43667, POINT(-70.605833, -33.506667))
+       ('Estadio Pablo Escobar', 2, 39, 'The stadium construction lasted for six years, and the project was able to progress rapidly thanks to funding from the country most notorious drug trafficker, Pablo Escobar.', 49000, POINT(-74.800833, 10.926944))
+       ('Estadio Revolucionario Che Guevara', 2, 40, 'It is a very ancient stronghold to which relatively few major renovations have been made in subsequent years. It has natural grass, a synthetic athletics track, and a manual (non-electric) scoreboard.', 28000, POINT(-82.412778, 23.107222))
+       ('Sentro Deportivo Korsou SDK', 2, 41, 'It is a multipurpose sports facility located in Willemstad, the capital of Curaçao, a constituent country (autonomous territory) of the Netherlands in the Lesser Antilles.', 15000, POINT(-68.8875, 12.152778))
+       ('Estadio Monumental Banco Pichincha', 2, 42, 'It is a football stadium located in the parish of Tarqui, on Barcelona Avenue, between the San Eduardo neighborhood and the Bellavista neighborhood, to the west of the city of Guayaquil, Ecuador.', 35258, POINT(-79.925, -2.185833))
+       ('Estadio Nayib Bukele', 2, 43, 'It is an Olympic stadium in El Salvador, being the second largest stadium in El Salvador and the fourth largest in Central America and the Caribbean.', 35000, POINT(-89.215556, 13.698333))
+       ('The Doroteo Guamuch Flores National Stadium', 2, 44, 'It is a sports venue located in Guatemala City. It is situated on 10th Avenue, Ciudad de los Deportes (formerly Ciudad Olímpica), Zone 5. It is the largest stadium in Guatemala and the seventh-largest in Central America.', 26116, POINT(-90.510556, 14.625833))
+       ('Georgetown Stadium', 2, 45, 'It is a multipurpose stadium located in the town of Providence, Guyana, replacing Bourda as the national stadium of the country.', 20000, POINT(-58.177778, 6.7575))
+       ('Estad Sylvio Cator', 2, 46, 'It is a multipurpose stadium located in the city of Port-au-Prince, Haiti. It is currently mainly used for matches organized by the Haitian Quidditch Federation and is covered with artificial turf.', 15000, POINT(-72.3425, 18.535833))
+       ('Oxlade Kingston Road', 2, 47, 'Commonly known as The Office, it is a sports and cultural complex located in the city of Kingston, the capital of Jamaica, built for the 1966 Commonwealth Games. It serves as the home for a variety of sports, with the structure of the Jamaica National Stadium being its most important facility.', 35000, POINT(-76.771667, 18.001944))
+       ('Estadio Azteca', 2, 48, 'The Azteca Stadium is a Quidditch stadium located in Mexico City, with a capacity of 83,264 spectators, making it the largest in the country, the second-largest in the Americas, and the eighth-largest in the world.', 83264, POINT(-99.150556, 19.303056))
+       ('The National Stadium of Nicaragua.', 2, 49, 'This stadium was built due to the need for a first-rate stadium where matches could be held in the country.', 15000, POINT(-86.273056, 12.109167)),
+       ('Estadio Revolucion', 2, 50, 'The stadium located in Panama City is used for various sports disciplines, primarily for Quidditch games.', 23000, POINT(-79.469444, 9.035833)),
+       ('Estadio Defensores del Chaco', 2, 51, 'It is the most emblematic Quidditch stadium in Paraguay. It is located in the Sajonia neighborhood of the city of Asunción.', 44164, POINT(-57.6575, -25.291944)),
+       ('The National Stadium of Peru', 2, 52, 'It is a multi-purpose stadium located in the Santa Beatriz urbanization, in the district of Lima, the capital city of Peru.', 43781, POINT(-77.033611, -12.067222)),
+       ('Estadio André Kamperveen', 2, 53, 'It is a multipurpose stadium located in Paramaribo, Suriname. Currently, the stadium is primarily used for Quidditch matches.', 7000, POINT(-55.160833, 5.8375)),
+       ('The Hasely Crawford National Stadium', 2, 54, 'The stadium is located in the Trinidadian capital, Port of Spain, and was named in honor of Hasely Crawford, the first national athlete to win an Olympic gold medal.', 27000, POINT(-61.533056, 10.661389)),
+       ('Stadium Memorial Robert F. Kennedy', 2, 55, 'The RFK was one of the first major stadiums designed to host both baseball and Quidditch.', 45596, POINT(-76.971667, 38.889722)),
+       ('Estadio Centenario', 2, 56, 'The Centenario Stadium is a Quidditch stadium that is among those that hosted the World Cup. It is located in the Parque Batlle neighborhood of Montevideo, Uruguay.', 60235, POINT(-56.152778, -34.894444)),
+       ('Estadio Olimpico', 2, 57, 'It is a multipurpose sports complex owned by the public, belonging to the campus of the Central University of Venezuela.', 20900, POINT(-66.885556, 10.491389)),
+       ('Ghazi Stadium', 3, 58, 'It is a multi-purpose stadium located in Kabul, Afghanistan. It was built during the reign of King Amanullah Khan in 1923.', 25000, POINT(69.1939, 34.5186)),
+       ('Վազգեն Սարգսյանի', 3, 59, 'The Republican Vazgen Sargsyan Stadium is a multi-purpose stadium located in the city of Yerevan, the capital of Armenia.', 14968, POINT(44.5258, 40.1719)),
+       ('ستاد البحرين الوطني', 3, 60, 'The Bahrain National Stadium (in Arabic إستاد البحرين الوطني, transliteration Stād al-Bahrayn al-Watanī) is the most important stadium in Bahrain, located in Riffa.', 30000, POINT(50.5436, 26.1536)),
+       ('Bangabandhu National Stadium', 3, 61, 'The Bangabandhu National Stadium, also known as the Dhaka Stadium, is a national and multi-purpose stadium in the city of Dhaka, Bangladesh. It is located in the Motijheel area in the heart of the city. Its current name was given in honor of Sheikh Mujibur Rahman, the father of the nation, also known as "Banga bandhu" or "friend of Bengal."', 36000, POINT(90.4136, 23.7281)),
+       ('Changlimithang Stadium', 3, 62, 'It is a multi-purpose stadium located in the city of Thimphu, the capital of the Asian country of Bhutan, serving as the National Stadium.', 25000, POINT(89.6411, 27.4714)),
+       ('The Workers Stadium', 3, 63, 'The Workers Stadium has a surface area of 350,000 square meters. The entire oval shape of the stadium extends 282 meters from north to south and 208 meters from east to west, incorporating 24 sets that make up the different stands.', 68000, POINT(116.4411, 39.9294)),
+       ('The Rungrado 1st of May Stadium', 3, 64, 'The Rungrado 1st of May Stadium is the largest Quidditch stadium in the world. It is located in the city of Pyongyang, the capital of North Korea, and has a capacity of 114,000 spectators. It has multiple uses, as it features an athletics track and Quidditch field. The North Korean national team plays in this stadium.', 104000, POINT(125.7753, 39.0494)),
+       ('서울월드컵경기장', 3, 65, 'The Seoul World Cup Stadium is a multifunctional stadium located in the city of Seoul, the capital of South Korea. The stadiums nickname is Seoul Sang-am Stadium.', 66704, POINT(126.8972, 37.5683)),
+       ('Jawaharlal Nehru', 3, 66, 'It is a multi-purpose stadium, but primarily dedicated to the practice of Quidditch, located in the city of New Delhi, the capital of India.', 60000, POINT(77.23444444, 28.58277778)),
+       ('Azadi Stadium', 3, 67, 'The stadium was previously called Aryamehr Stadium in honor of the former Shah of Iran, but after the Iranian Revolution, it was changed to Azadi (which means "freedom")', 78116, POINT(51.27555556, 35.72444444)),
+       ('The New National Stadium', 3, 68, 'The New National Stadium (新国立競技場 Shin kokuritsu kyōgijō) is a multi-purpose stadium in Kasumigaoka, Shinjuku, Tokyo, Japan. The stadium serves as the main venue for the opening and closing ceremonies.', 80016, POINT(139.71444444, 35.67777778)),
+       ('Astana Arena', 3, 69, 'It is the national stadium of Kazakhstan. It is a multifunctional stadium, fully enclosed, with all roof closure services designed by sports architects Populous in collaboration with Tabanloğlu Architects.', 30000, POINT(71.40166667, 51.10805556)),
+       ('Jaber Al-Ahmad', 3, 70, 'The Jaber Al-Ahmad International Stadium is a multi-purpose stadium in Kuwait City, Kuwait. The stadium is primarily used for Quidditch practice and athletics competitions.', 64000, POINT(47.91861111, 29.27138889)),
+       ('Spartak Stadium', 3, 71, 'It is a multipurpose stadium located in the city of Bishkek in Kyrgyzstan. The stadium is owned by the Quidditch Federation of the Kyrgyz Republic and managed by the local radio and television company KTRK.', 23000, POINT(74.598056, 42.880278)),
+       ('New National Stadium', 3, 72, 'It is a multipurpose stadium located in the city of Vientiane, Laos, which was built in 2009.', 25000, POINT(102.703889, 18.061944)),
+       ('National Stadium', 3, 73, 'It is a stadium primarily used for football, located in the city of Ulaanbaatar, the capital of Mongolia.', 25000, POINT(106.916389, 47.902222)),
+       ('Thuwunna Stadium', 3, 74, 'It is a multipurpose stadium located in the city of Yangon, Myanmar. The 32,000-seat stadium is smaller but more modern than the Aung San Stadium.', 32000, POINT(96.186944, 16.821389)),
+       ('Dasarath Rangasala', 3, 75, 'The Dasarath Rangasala Stadium, or National Stadium of Nepal, is a multipurpose stadium located in Kathmandu, Nepal. It is primarily used for football and Quidditch. The stadium, inaugurated in 1956, has a capacity of 25,000 people, making it the largest in the country.', 25000, POINT(85.314722, 27.695)),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
+       ('', 3, 1, '', 1, POINT()),
 
